@@ -1,6 +1,6 @@
 install:
 	composer install
-	stat .env || cp .env.example .env:
+	stat .env || cp .env.example .env
 
 lint:
 	composer run-script phpcs -- --standard=PSR12 app tests
