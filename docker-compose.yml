@@ -1,0 +1,32 @@
+version: '3'
+services:
+  app:
+    build: ./docker/app
+    volumes:
+      - ${PWD}:/app
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  nginx:
+    build: ./docker/nginx
+    volumes:
+      - ${PWD}:/app
+    depends_on:
+      - app
+    ports:
+      - 127.0.0.1:80:80
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=page-analyzer
+      - POSTGRES_USER=page-analyzer
+      - POSTGRES_DB=page-analyzer
+    ports:
+      - 5432:5432
+    volumes:
+      - ${PWD}/docker/db/docker-pg-data:/var/lib/postgresql/data:rw
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "page-analyzer", "-U", "page-analyzer"]
