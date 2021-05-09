@@ -14,10 +14,11 @@ docker-lint:
 	docker run --rm -v $(PWD):/app -w /app composer:latest make lint
 
 docker-install:
-	stat .env || cp .env.example .env && docker compose run --rm app php artisan key:generate && \
+	stat .env || cp .env.example .env && \
+	docker run --rm -v $(PWD):/app -w /app php:8.0-fpm php artisan key:generate && \
 	make docker-compose-install && \
     make docker-npm && \
-    make docker-migrate && \
+    make docker-migrate
 
 docker-npm:
 	docker run --rm -v $(PWD):/app -w /app node:current-alpine3.13 npm install
