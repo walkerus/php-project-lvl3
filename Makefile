@@ -34,7 +34,7 @@ docker-bash:
 	docker compose run --rm app bash
 
 docker-migrate:
-	docker compose exec app php artisan migrate
+	docker-compose exec app php artisan migrate
 
 docker-down:
 	docker-compose down
