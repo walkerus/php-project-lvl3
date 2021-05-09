@@ -16,6 +16,7 @@ docker-lint:
 docker-install:
 	make docker-compose && \
     make docker-npm && \
+    make docker-migrate && \
 	stat .env || cp .env.example .env && docker compose run --rm app php artisan key:generate
 
 docker-npm:
