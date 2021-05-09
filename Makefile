@@ -14,7 +14,7 @@ docker-lint:
 	docker run --rm -v $(PWD):/app -w /app composer:latest make lint
 
 docker-install:
-	make docker-compose && \
+	make docker-compose-install && \
     make docker-npm && \
     make docker-migrate && \
 	stat .env || cp .env.example .env && docker compose run --rm app php artisan key:generate
