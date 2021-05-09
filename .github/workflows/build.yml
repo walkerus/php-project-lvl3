@@ -9,7 +9,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install
-        run: docker-install
+        run: make docker-install
       - name: Run linter
         run: make lint
       - name: Run tests
