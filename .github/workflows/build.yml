@@ -8,11 +8,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Composer install
-        run: make install
+      - name: Install
+        run: docker-install
       - name: Run linter
         run: make lint
-      - name: Run migrate
-        run: make docker-migrate
       - name: Run tests
         run: make docker-test
+      - name: Run down
+        run: make docker-down

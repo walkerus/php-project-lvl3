@@ -28,7 +28,6 @@ docker-compose-install:
 
 docker-test:
 	docker-compose run --rm app make test
-	make docker-down
 
 docker-bash:
 	docker compose run --rm app bash
