@@ -14,5 +14,3 @@ jobs:
         run: make lint
       - name: Run tests
         run: make docker-test
-      - name: Run down
-        run: make docker-down
