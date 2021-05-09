@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://github.com/walkerus/php-project-lvl3/actions?query=workflow%3Ahexlet-check"><img src="https://github.com/walkerus/php-project-lvl3/workflows/hexlet-check/badge.svg" alt="Hexlet"></a>
-    <a href="https://packagist.org/packages/laravel/framework"><img src="https://github.com/walkerus/php-project-lvl3/workflows/Build/badge.svg" alt="Build Status"></a>
+    <a href="https://github.com/walkerus/php-project-lvl3/actions?query=workflow%3ABuild"><img src="https://github.com/walkerus/php-project-lvl3/workflows/Build/badge.svg" alt="Build Status"></a>
 </p>
 
 ## About
