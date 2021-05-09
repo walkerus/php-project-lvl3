@@ -15,8 +15,8 @@ docker-lint:
 
 docker-install:
 	stat .env || cp .env.example .env && \
-	docker run --rm -v $(PWD):/app -w /app php:8.0-fpm php artisan key:generate && \
 	make docker-compose-install && \
+	docker run --rm -v $(PWD):/app -w /app php:8.0-fpm php artisan key:generate && \
     make docker-npm && \
     make docker-migrate
 
@@ -34,7 +34,7 @@ docker-bash:
 	docker compose run --rm app bash
 
 docker-migrate:
-	docker-compose run app php artisan migrate
+	docker-compose run --rm app php artisan migrate
 
 docker-down:
 	docker-compose down
