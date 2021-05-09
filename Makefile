@@ -20,6 +20,12 @@ docker-install:
     make docker-npm && \
     make docker-migrate
 
+docker-install-ci:
+	stat .env || cp .env.example .env && \
+	make docker-compose-install && \
+	docker run --rm -v $(PWD):/app -w /app php:8.0-fpm php artisan key:generate && \
+    make docker-migrate
+
 docker-npm:
 	docker run --rm -v $(PWD):/app -w /app node:current-alpine3.13 npm install
 	docker run --rm -v $(PWD):/app -w /app node:current-alpine3.13 npm run dev
@@ -34,7 +40,7 @@ docker-bash:
 	docker compose run --rm app bash
 
 docker-migrate:
-	docker-compose run --rm app php artisan migrate
+	docker-compose run --rm -u $(shell id -u):$(shell id -g) app php artisan migrate
 
 docker-down:
 	docker-compose down
