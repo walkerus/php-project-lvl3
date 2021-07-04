@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <title>@yield('title')</title>
     <script src="{{ empty($_SERVER['HTTPS']) ? asset('js/app.js') : secure_asset('js/app.js') }}" defer></script>
-    <link href="{{ empty($_SERVER['HTTPS']) ? asset('css/app.css') : secure_asset('css/app.css')  }}" rel="stylesheet">
+    <link href="{{ empty($_SERVER['HTTPS']) ? asset('css/app.css') : secure_asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
 <header class="flex-shrink-0">
