@@ -36,6 +36,8 @@ class UrlControllerTest extends TestCase
         $response = $this->post(route('urls.store'), ['url' => ['name' => 'example']]);
         $response->assertSessionHasErrors(['url.name' => 'url.name должен быть в формате url.']);
         $response->assertRedirect('/');
+
+        $this->assertDatabaseMissing('urls', ['name' => 'example']);
     }
 
     public function testStore()
@@ -43,6 +45,8 @@ class UrlControllerTest extends TestCase
         $response = $this->post(route('urls.store'), ['url' => ['name' => 'http://example']]);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect('/');
+
+        $this->assertDatabaseHas('urls', ['name' => 'http://example']);
     }
 
     public function testShowNotFound()

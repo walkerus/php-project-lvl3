@@ -12,5 +12,7 @@ jobs:
         run: make docker-install-ci
       - name: Run linter
         run: make lint
+      - name: Run migrate
+        run: make docker-migrate
       - name: Run tests
         run: make docker-test
