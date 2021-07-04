@@ -14,15 +14,11 @@ class UrlController extends Controller
 {
     public function index(): View | ViewFactory
     {
-        $maxCreatedAtQuery = DB::table('url_checks AS uc')
-            ->selectRaw('MAX(uc.created_at)')
-            ->whereRaw('uc.url_id = url_checks.url_id')
-            ->groupBy('uc.url_id')->toSql();
-
         $latestUrlChecksQuery = DB::table('url_checks')
             ->select(['url_checks.url_id', 'url_checks.status_code', 'url_checks.created_at'])
-            ->whereRaw("url_checks.created_at = ($maxCreatedAtQuery)")
-            ->limit(1);
+            ->distinct('url_checks.url_id')
+            ->orderBy('url_checks.url_id')
+            ->latest();
 
         return view('urls.index', [
             'urls' => DB::table('urls')
@@ -63,10 +59,14 @@ class UrlController extends Controller
         $urlParts = parse_url($request->request->get('url')['name']);
         $url = ($urlParts['scheme'] ?? 'http') . '://' . $urlParts['host'];
 
-        DB::table('urls')->insertOrIgnore([
-            'name' => $url,
-        ]);
+        $urlId = DB::table('urls')->select('id')->where('name', '=', $url)->value('id');
 
-        return back()->with('success', 'Сайт успешно добавлен');
+        if (is_null($urlId)) {
+            $urlId = DB::table('urls')->insertGetId([
+                'name' => $url,
+            ]);
+        }
+
+        return redirect()->route('urls.show', ['url' => $urlId])->with('success', 'Сайт успешно добавлен');
     }
 }

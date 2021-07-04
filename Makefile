@@ -50,4 +50,4 @@ docker-down:
 	docker-compose down
 
 docker-up:
-	docker compose up -d --build
+	docker compose up -d

@@ -15,7 +15,7 @@ class UrlControllerTest extends TestCase
         parent::setUp();
         DB::table('urls')->insert([
             [
-                'id' => 1,
+                'id' => 2,
                 'name' => 'http://test.ru'
             ],
         ]);
@@ -42,22 +42,23 @@ class UrlControllerTest extends TestCase
 
     public function testStore()
     {
-        $response = $this->post(route('urls.store'), ['url' => ['name' => 'http://example']]);
+        $urlData = ['name' => 'http://abc'];
+        $response = $this->post(route('urls.store'), ['url' => $urlData]);
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect('/');
+        $response->assertRedirect();
 
-        $this->assertDatabaseHas('urls', ['name' => 'http://example']);
+        $this->assertDatabaseHas('urls', $urlData);
     }
 
     public function testShowNotFound()
     {
-        $response = $this->get(route('urls.show', ['url' => 2]));
+        $response = $this->get(route('urls.show', ['url' => 1]));
         $response->assertNotFound();
     }
 
     public function testShow()
     {
-        $response = $this->get(route('urls.show', ['url' => 1]));
+        $response = $this->get(route('urls.show', ['url' => 2]));
         $response->assertOk();
     }
 }

@@ -39,18 +39,27 @@ class UrlCheckController extends Controller
 
             try {
                 $headline = $document->first('h1')?->innerHtml();
+                if (!is_null($headline)) {
+                    $headline = mb_strimwidth($headline, 0, 252, '...');
+                }
             } catch (Exception) {
                 $headline = null;
             }
 
             try {
                 $keywords = $document->first('meta[name="keywords"]::attr(content)');
+                if (!is_null($keywords)) {
+                    $keywords = mb_strimwidth($keywords, 0, 252, '...');
+                }
             } catch (Exception) {
                 $keywords = null;
             }
 
             try {
-                $description = $document->first('meta[name="description"]::attr(content)');
+                $description  = $document->first('meta[name="description"]::attr(content)');
+                if (!is_null($description)) {
+                    $description = mb_strimwidth($description, 0, 252, '...');
+                }
             } catch (Exception) {
                 $description = null;
             }
