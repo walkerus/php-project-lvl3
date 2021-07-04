@@ -36,6 +36,10 @@ docker-compose-install:
 docker-test:
 	docker-compose run --rm app make test
 
+docker-test-ci:
+	docker-compose -f docker-compose-test.yml -p page-analizer-test run app ./artisan migrate
+	docker-compose -f docker-compose-test.yml -p page-analizer-test run --rm app make test
+
 docker-bash:
 	docker compose run --rm app bash
 

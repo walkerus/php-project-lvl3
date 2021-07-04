@@ -1,0 +1,21 @@
+version: '3'
+services:
+  app:
+    build: ./docker/app
+    volumes:
+      - ${PWD}:/app
+    env_file:
+      - .env
+    working_dir: /app
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_PASSWORD=page-analyzer
+      - POSTGRES_USER=page-analyzer
+      - POSTGRES_DB=page-analyzer
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "page-analyzer", "-U", "page-analyzer"]
