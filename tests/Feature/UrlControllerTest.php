@@ -33,7 +33,7 @@ class UrlControllerTest extends TestCase
         $response->assertSessionHasErrors(['name' => 'name обязательное поле.']);
         $response->assertRedirect('/');
 
-        $response = $this->post(route('urls.store'), ['url' => ['name' => 'example']]);
+        $response = $this->post(route('urls.store'), ['name' => 'example']);
         $response->assertSessionHasErrors(['name' => 'name должен быть в формате url.']);
         $response->assertRedirect('/');
 
@@ -43,7 +43,7 @@ class UrlControllerTest extends TestCase
     public function testStore()
     {
         $urlData = ['name' => 'http://abc'];
-        $response = $this->post(route('urls.store'), ['url' => $urlData]);
+        $response = $this->post(route('urls.store'), $urlData);
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
 
