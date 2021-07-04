@@ -30,11 +30,11 @@ class UrlControllerTest extends TestCase
     public function testStoreBadRequest()
     {
         $response = $this->post(route('urls.index'), []);
-        $response->assertSessionHasErrors(['url.name' => 'url.name обязательное поле.']);
+        $response->assertSessionHasErrors(['name' => 'name обязательное поле.']);
         $response->assertRedirect('/');
 
         $response = $this->post(route('urls.store'), ['url' => ['name' => 'example']]);
-        $response->assertSessionHasErrors(['url.name' => 'url.name должен быть в формате url.']);
+        $response->assertSessionHasErrors(['name' => 'name должен быть в формате url.']);
         $response->assertRedirect('/');
 
         $this->assertDatabaseMissing('urls', ['name' => 'example']);

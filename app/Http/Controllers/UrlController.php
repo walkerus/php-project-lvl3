@@ -53,16 +53,20 @@ class UrlController extends Controller
     public function store(Request $request): Response
     {
         $request->validate([
-            'url.name' => 'required|url',
+            'name' => 'required|url|max:255',
         ]);
 
-        $urlParts = parse_url($request->request->get('url')['name']);
+        $urlParts = parse_url($request->request->get('name'));
         $url = ($urlParts['scheme'] ?? 'http') . '://' . $urlParts['host'];
 
-        DB::table('urls')->insertOrIgnore([
-            'name' => $url,
-        ]);
+        $urlId = DB::table('urls')->select('id')->where('name', '=', $url)->value('id');
 
-        return back()->with('success', 'Сайт успешно добавлен');
+        if (is_null($urlId)) {
+            $urlId = DB::table('urls')->insertGetId([
+                'name' => $url,
+            ]);
+        }
+
+        return redirect()->route('urls.show', ['url' => $urlId])->with('success', 'Сайт успешно добавлен');
     }
 }
