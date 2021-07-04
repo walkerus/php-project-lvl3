@@ -52,15 +52,23 @@ class UrlController extends Controller
 
     public function store(Request $request): Response
     {
-        $request->request->set('name', $request->request->get('url')['name'] ?? null);
-        $request->validate([
+        $formData = $request->input('url');
+        $validator = app('validator')->make($formData, [
             'name' => 'required|url|max:255',
         ]);
 
-        $urlParts = parse_url($request->request->get('url')['name']);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $urlParts = parse_url($formData['name']);
         $url = ($urlParts['scheme'] ?? 'http') . '://' . $urlParts['host'];
 
-        $urlId = DB::table('urls')->select('id')->where('name', '=', $url)->value('id');
+        $urlId = DB::table('urls')->select('id')
+            ->where('name', '=', $url)
+            ->value('id');
 
         if (is_null($urlId)) {
             $urlId = DB::table('urls')->insertGetId([

@@ -32,7 +32,7 @@ class UrlChecksControllerTest extends TestCase
         ]);
     }
 
-    public function testStoreNotFound()
+    public function testStoreNotFound(): void
     {
         $response = $this->post(route('urls.checks.store', ['url' => 2]), []);
         $response->assertNotFound();
@@ -40,7 +40,7 @@ class UrlChecksControllerTest extends TestCase
         $this->assertDatabaseMissing('url_checks', ['url_id' => 2]);
     }
 
-    public function testStore()
+    public function testStore(): void
     {
         Http::fake([
             'http://test.ru' => Http::response(),

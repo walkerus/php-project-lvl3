@@ -34,21 +34,21 @@ class UrlCheckController extends Controller
             return back()->with('error', 'Ошибка при попытке получить ресурс');
         }
 
-        if (!empty($response->body())) {
+        if ($response->body() !== '') {
             $document = new Document($response->body());
 
             try {
-                $headline = $document->first('h1')?->innerHtml();
-                if (!is_null($headline)) {
-                    $headline = mb_strimwidth($headline, 0, 252, '...');
+                $h1 = optional($document->first('h1'))->text();
+                if (is_string($h1)) {
+                    $h1 = mb_strimwidth($h1, 0, 252, '...');
                 }
             } catch (Exception) {
-                $headline = null;
+                $h1 = null;
             }
 
             try {
-                $keywords = $document->first('meta[name="keywords"]::attr(content)');
-                if (!is_null($keywords)) {
+                $keywords = optional($document->first('meta[name=keywords]'))->getAttribute('content');
+                if (is_string($keywords)) {
                     $keywords = mb_strimwidth($keywords, 0, 252, '...');
                 }
             } catch (Exception) {
@@ -56,8 +56,8 @@ class UrlCheckController extends Controller
             }
 
             try {
-                $description  = $document->first('meta[name="description"]::attr(content)');
-                if (!is_null($description)) {
+                $description = optional($document->first('meta[name=description]'))->getAttribute('content');
+                if (is_string($description)) {
                     $description = mb_strimwidth($description, 0, 252, '...');
                 }
             } catch (Exception) {
@@ -68,7 +68,7 @@ class UrlCheckController extends Controller
         DB::table('url_checks')->insert([
             'url_id' => $url->id,
             'status_code' => $response->status(),
-            'h1' => $headline ?? null,
+            'h1' => $h1 ?? null,
             'description' => $description ?? null,
             'keywords' => $keywords ?? null,
         ]);
