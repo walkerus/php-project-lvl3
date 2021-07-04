@@ -59,14 +59,10 @@ class UrlController extends Controller
         $urlParts = parse_url($request->request->get('url')['name']);
         $url = ($urlParts['scheme'] ?? 'http') . '://' . $urlParts['host'];
 
-        $urlId = DB::table('urls')->select('id')->where('name', '=', $url)->value('id');
+        DB::table('urls')->insertOrIgnore([
+            'name' => $url,
+        ]);
 
-        if (is_null($urlId)) {
-            $urlId = DB::table('urls')->insertGetId([
-                'name' => $url,
-            ]);
-        }
-
-        return redirect()->route('urls.show', ['url' => $urlId])->with('success', 'Сайт успешно добавлен');
+        return back()->with('success', 'Сайт успешно добавлен');
     }
 }
