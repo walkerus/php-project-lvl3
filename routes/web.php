@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\UrlCheckController;
 use App\Http\Controllers\UrlController;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 
 /*
