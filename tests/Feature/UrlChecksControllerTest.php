@@ -45,13 +45,7 @@ class UrlChecksControllerTest extends TestCase
         Http::fake([
             'http://test.ru' => Http::response(),
             'http://test.su' => Http::response(null, 404),
-            'http://test.ua' => Http::response(
-                implode('', [
-                    '<h1>Headline</h1>',
-                    '<meta name="keywords" content="keywords">',
-                    '<meta name="description" content="description">'
-                ]),
-            ),
+            'http://test.ua' => Http::response($this->getFixture('test-ua.html')),
         ]);
 
         $response = $this->post(route('urls.checks.store', ['url' => 1]));
@@ -77,5 +71,10 @@ class UrlChecksControllerTest extends TestCase
             'description' => 'description',
             'keywords' => 'keywords'
         ]);
+    }
+
+    private function getFixture(string $fixtureName): string | false
+    {
+        return file_get_contents(realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'fixtures', $fixtureName])));
     }
 }

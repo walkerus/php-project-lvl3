@@ -15,8 +15,8 @@
                     <tr>
                         <th>{{ $url->id  }}</th>
                         <th><a href="{{ route('urls.show', ['url' => $url->id]) }}">{{ $url->name }}</a></th>
-                        <th>{{ $url->last_check ?? '-' }}</th>
-                        <th>{{ $url->last_check_code ?? '-' }}</th>
+                        <th>{{ $last_url_checks[$url->id]['created_at'] ?? '-' }}</th>
+                        <th>{{ $last_url_checks[$url->id]['status_code'] ?? '-' }}</th>
                     </tr>
                 @endforeach
                 </tbody>

@@ -16,11 +16,7 @@ class UrlCheckController extends Controller
 {
     public function store(int $urlId): Response
     {
-        $url = DB::table('urls')->where('id', $urlId)->first();
-
-        if (is_null($url)) {
-            abort(404);
-        }
+        $url = $this->findUrlOrFail($urlId);
 
         try {
             $response = Http::get($url->name);

@@ -14,34 +14,29 @@ class UrlController extends Controller
 {
     public function index(): View | ViewFactory
     {
-        $latestUrlChecksQuery = DB::table('url_checks')
-            ->select(['url_checks.url_id', 'url_checks.status_code', 'url_checks.created_at'])
-            ->distinct('url_checks.url_id')
-            ->orderBy('url_checks.url_id')
-            ->latest();
+        $urls = DB::table('urls')
+            ->oldest()
+            ->paginate();
+
+        $lastChecks = DB::table('url_checks')
+            ->distinct('url_id')
+            ->whereIn('url_id', array_column($urls->items(), 'id'))
+            ->get()
+            ->keyBy('url_id');
 
         return view('urls.index', [
-            'urls' => DB::table('urls')
-                ->addSelect('urls.id')
-                ->addSelect('urls.name')
-                ->addSelect('url_checks.created_at AS last_check')
-                ->addSelect('url_checks.status_code AS last_check_code')
-                ->leftJoinSub($latestUrlChecksQuery, 'url_checks', 'urls.id', '=', 'url_checks.url_id')
-                ->paginate()
+            'urls' => $urls,
+            'last_url_checks' => $lastChecks
         ]);
     }
 
     public function show(int $id): View | ViewFactory
     {
-        $url = DB::table('urls')->where('id', $id)->first();
-
-        if (is_null($url)) {
-            abort(404);
-        }
+        $url = $this->findUrlOrFail($id);
 
         $checks = DB::table('url_checks')
             ->where('url_id', $url->id)
-            ->orderBy('created_at', 'desc')
+            ->latest()
             ->get();
 
         return view('urls.show', [

@@ -20,6 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function (): Application | Factory | View {
     return view('welcome');
-});
-Route::resource('urls', UrlController::class);
-Route::resource('urls.checks', UrlCheckController::class);
+})->name('welcome');
+Route::resource('urls', UrlController::class)->except([
+    'update',
+    'destroy',
+]);
+Route::resource('urls.checks', UrlCheckController::class)->only([
+    'store',
+]);

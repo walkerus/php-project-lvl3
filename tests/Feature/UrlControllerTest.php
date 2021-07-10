@@ -10,14 +10,16 @@ class UrlControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private const NOT_EXISTED_URL_ID = 2;
+
+    private int $existedUrlId;
+
     protected function setUp(): void
     {
         parent::setUp();
-        DB::table('urls')->insert([
-            [
-                'id' => 10,
-                'name' => 'http://test.ru'
-            ],
+
+        $this->existedUrlId = DB::table('urls')->insertGetId([
+            'name' => 'http://test.ru'
         ]);
     }
 
@@ -52,13 +54,13 @@ class UrlControllerTest extends TestCase
 
     public function testShowNotFound(): void
     {
-        $response = $this->get(route('urls.show', ['url' => 1]));
+        $response = $this->get(route('urls.show', ['url' => static::NOT_EXISTED_URL_ID]));
         $response->assertNotFound();
     }
 
     public function testShow(): void
     {
-        $response = $this->get(route('urls.show', ['url' => 10]));
+        $response = $this->get(route('urls.show', ['url' => $this->existedUrlId]));
         $response->assertOk();
     }
 }
