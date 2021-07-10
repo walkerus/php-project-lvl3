@@ -85,6 +85,6 @@ class UrlChecksControllerTest extends TestCase
         $content = file_get_contents($path);
         throw_unless($content, new Exception('fixture read error'));
 
-        return $content;
+        return (string) $content;
     }
 }
