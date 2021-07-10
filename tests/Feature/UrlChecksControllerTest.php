@@ -82,6 +82,9 @@ class UrlChecksControllerTest extends TestCase
         $path = realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'fixtures', $fixtureName]));
         throw_unless($path, new Exception('fixtures not found'));
 
-        return file_get_contents($path);
+        $content = file_get_contents($path);
+        throw_unless($content, new Exception('fixture read error'));
+
+        return $content;
     }
 }
