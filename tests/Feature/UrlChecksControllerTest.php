@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use Exception;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -73,8 +74,14 @@ class UrlChecksControllerTest extends TestCase
         ]);
     }
 
-    private function getFixture(string $fixtureName): string | false
+    /**
+     * @throws \Throwable
+     */
+    private function getFixture(string $fixtureName): string
     {
-        return file_get_contents(realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'fixtures', $fixtureName])));
+        $path = realpath(implode(DIRECTORY_SEPARATOR, [__DIR__, '..', 'fixtures', $fixtureName]));
+        throw_unless($path, new Exception('fixtures not found'));
+
+        return file_get_contents($path);
     }
 }
